@@ -34,6 +34,7 @@
 RemoteSystemsTempFiles
 bin/
 tmp/
+Debug/
 *.tmp
 *.bak
 *.swp
