@@ -6,7 +6,7 @@
  */
 
 #include <iostream>
-#include "Geom.h"
+#include "../inc/Geom.h"
 using namespace std;
 
 void CPoint::set(double coordinateX, double coordinateY) {
