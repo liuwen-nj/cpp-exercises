@@ -5,56 +5,51 @@
  *      Author: cst
  */
 
+#include <iostream>
 #include "Geom.h"
-
-CPoint::CPoint(double coordinateX, double coordinateY) {
-  set(coordinateX, coordinateY);
-}
+using namespace std;
 
 void CPoint::set(double coordinateX, double coordinateY) {
-  x = coordinateX;
-  y = coordinateY;
+  X = coordinateX;
+  Y = coordinateY;
 }
 
-string CPoint::list() {
-  return "[x=" + to_string(x) + "; y=" + to_string(y) + "]";
+void CPoint::list() {
+  cout << "CPoint " << " [x=" << X << "; y=" << Y << "]" << endl;
 }
 
-CLine::CLine(CPoint* pointA, CPoint* pointB) {
-  set(pointA, pointB);
+void CLine::set(double x1, double y1, double x2, double y2) {
+  P1.set(x1, y1);
+  P2.set(x2, y2);
 }
 
-void CLine::set(CPoint* pointA, CPoint* pointB) {
-  pA = pointA;
-  pB = pointB;
+void CLine::list() {
+  cout << "CLine {" << endl;
+  P1.list();
+  P2.list();
+  cout << "}" << endl;
 }
 
-string CLine::list() {
-  return "[A=" + (*pA).list() + "; B=" + (*pB).list() + "]";
+void CRectangle::set(double x1, double y1, double x2, double y2) {
+  P1.set(x1, y1);
+  P2.set(x2, y2);
 }
 
-CRectangle::CRectangle(CPoint* pointA, CPoint* pointB) {
-  set(pointA, pointB);
+void CRectangle::list() {
+  cout << "CRectangle {" << endl;
+  P1.list();
+  P2.list();
+  cout << "}" << endl;
 }
 
-void CRectangle::set(CPoint* pointA, CPoint* pointB) {
-  pA = pointA;
-  pB = pointB;
+void CCircle::set(double x, double y, double radius) {
+  PM.set(x, y);
+  R = radius;
 }
 
-string CRectangle::list() {
-  return "[A=" + (*pA).list() + "; B=" + (*pB).list() + "]";
-}
-
-CCircle::CCircle(CPoint* pointM, double radius) {
-  set(pointM, radius);
-}
-
-void CCircle::set(CPoint* pointM, double radius) {
-  pM = pointM;
-  r = radius;
-}
-
-string CCircle::list() {
- return "[M=" + (*pM).list() + "; r=" + to_string(r) + "]";
+void CCircle::list() {
+  cout << "CLine {" << endl;
+  PM.list();
+  cout << "R = " << R << endl;
+  cout << "}" << endl;
 }

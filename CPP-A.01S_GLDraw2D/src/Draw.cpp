@@ -9,54 +9,62 @@
 #include "Geom.h"
 using namespace std;
 
-namespace helper {
-  CLine* createLine() {
-    double xA, yA, xB, yB;
-    cout << "Please enter X coordinate of first point: ";
-    cin >> xA;
-    cout << "Please enter Y coordinate of first point: ";
-    cin >> yA;
-    CPoint* pA = new CPoint(xA, yA);
+CPoint createPoint() {
+  double x, y;
+  cout << "Please enter X coordinate: ";
+  cin >> x;
+  cout << "Please enter Y coordinate: ";
+  cin >> y;
 
-    cout << "Please enter X coordinate of second point: ";
-    cin >> xB;
-    cout << "Please enter Y coordinate of second point: ";
-    cin >> yB;
-    CPoint* pB = new CPoint(xB, yB);
+  CPoint point;
+  point.set(x,y);
+  return point;
+}
 
-    return new CLine(pA, pB);
-  }
+CLine createLine() {
+  double x1, y1, x2, y2;
+  cout << "Please enter X coordinate of first point: ";
+  cin >> x1;
+  cout << "Please enter Y coordinate of first point: ";
+  cin >> y1;
+  cout << "Please enter X coordinate of second point: ";
+  cin >> x2;
+  cout << "Please enter Y coordinate of second point: ";
+  cin >> y2;
 
-  CRectangle* createRectangle() {
-    double xA, yA, xB, yB;
-    cout << "Please enter X coordinate of first point: ";
-    cin >> xA;
-    cout << "Please enter Y coordinate of first point:";
-    cin >> yA;
-    CPoint* pA = new CPoint(xA, yA);
+  CLine line;
+  line.set(x1,y1,x2,y2);
+  return line;
+}
 
-    cout << "Please enter X coordinate of second point: ";
-    cin >> xB;
-    cout << "Please enter Y coordinate of second point: ";
-    cin >> yB;
-    CPoint* pB = new CPoint(xB, yB);
+CRectangle createRectangle() {
+  double x1, y1, x2, y2;
+  cout << "Please enter X coordinate of first point: ";
+  cin >> x1;
+  cout << "Please enter Y coordinate of first point:";
+  cin >> y1;
+  cout << "Please enter X coordinate of second point: ";
+  cin >> x2;
+  cout << "Please enter Y coordinate of second point: ";
+  cin >> y2;
 
-    return new CRectangle(pA, pB);
-  }
+  CRectangle rectangle;
+  rectangle.set(x1, y1, x2, y2);
+  return rectangle;
+}
 
-  CCircle* createCircle() {
-    double xM, yM, r;
-    cout << "Please enter X coordinate of center point: ";
-    cin >> xM;
-    cout << "Please enter Y coordinate of center point: ";
-    cin >> yM;
-    CPoint* pM = new CPoint(xM, yM);
+CCircle createCircle() {
+  double x, y, r;
+  cout << "Please enter X coordinate of center point: ";
+  cin >> x;
+  cout << "Please enter Y coordinate of center point: ";
+  cin >> y;
+  cout << "Please enter value for radius: ";
+  cin >> r;
 
-    cout << "Please enter value for radius: ";
-    cin >> r;
-
-    return new CCircle(pM, r);
-  }
+  CCircle circle;
+  circle.set(x, y, r);
+  return circle;
 }
 
 int main() {
@@ -66,7 +74,8 @@ int main() {
   while (!quit) {
     int i;
     cout
-        << "Please input: draw line (1), rectangle (2) or circle (3) ? Quit (0)." << endl;
+        << "Please input: draw point (1), draw line (2), rectangle (3) or circle (4) ? Quit (0)."
+        << endl;
     cin >> i;
 
     switch (i) {
@@ -74,20 +83,25 @@ int main() {
       quit = true;
       break;
     case 1: {
-      CLine* line = helper::createLine();
-      cout << "You created the line " + (*line).list() << endl;
+      CPoint point = createPoint();
+      point.list();
+    }
       break;
-    }
     case 2: {
-      CRectangle* rectangle = helper::createRectangle();
-      cout << "You created the rectangle " + (*rectangle).list() << endl;
+      CLine line = createLine();
+      line.list();
     }
-    break;
+      break;
     case 3: {
-      CCircle* circle = helper::createCircle();
-      cout << "You created the circle " + (*circle).list() << endl;
+      CRectangle rectangle = createRectangle();
+      rectangle.list();
     }
-    break;
+      break;
+    case 4: {
+      CCircle circle = createCircle();
+      circle.list();
+    }
+      break;
     default:
       cout << "Not a valid input!" << endl;
       break;

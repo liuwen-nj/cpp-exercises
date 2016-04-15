@@ -13,46 +13,42 @@ using namespace std;
 
 class CPoint {
   private:
-    double x;
-    double y;
+    double X;
+    double Y;
 
   public:
-    CPoint(double, double);
     void set(double, double);
-    string list();
+    void list();
 };
 
 class CLine {
   private:
-    CPoint* pA;
-    CPoint* pB;
+    CPoint P1;
+    CPoint P2;
 
   public:
-    CLine(CPoint*, CPoint*);
-    void set(CPoint*, CPoint*);
-    string list();
+    void set(double, double, double, double);
+    void list();
 };
 
 class CRectangle {
   private:
-    CPoint* pA;
-    CPoint* pB;
+    CPoint P1;
+    CPoint P2;
 
   public:
-    CRectangle(CPoint*, CPoint*);
-    void set(CPoint*, CPoint*);
-    string list();
+    void set(double, double, double, double);
+    void list();
 };
 
 class CCircle {
   private:
-    CPoint* pM;
-    double r;
+    CPoint PM;
+    double R;
 
   public:
-    CCircle(CPoint*, double);
-    void set(CPoint*, double);
-    string list();
+    void set(double, double, double);
+    void list();
 };
 
 #endif /* GEOM_H_ */
