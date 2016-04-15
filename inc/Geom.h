@@ -17,6 +17,13 @@ class CPoint {
     double Y;
 
   public:
+    static unsigned long ulCount;
+    static void listCount();
+
+    CPoint();
+    CPoint(double, double);
+    CPoint(const CPoint&);
+    ~CPoint();
     void set(double, double);
     void list();
 };
@@ -27,6 +34,14 @@ class CLine {
     CPoint P2;
 
   public:
+    static unsigned long ulCount;
+    static void listCount();
+
+    CLine();
+    CLine(double, double, double, double);
+    CLine(CPoint p1, CPoint p2);
+    CLine(const CLine&);
+    ~CLine();
     void set(double, double, double, double);
     void list();
 };
@@ -37,6 +52,14 @@ class CRectangle {
     CPoint P2;
 
   public:
+    static unsigned long ulCount;
+    static void listCount();
+
+    CRectangle();
+    CRectangle(double, double, double, double);
+    CRectangle(CPoint p1, CPoint p2);
+    CRectangle(const CRectangle&);
+    ~CRectangle();
     void set(double, double, double, double);
     void list();
 };
@@ -47,6 +70,14 @@ class CCircle {
     double R;
 
   public:
+    static unsigned long ulCount;
+    static void listCount();
+
+    CCircle();
+    CCircle(double, double, double);
+    CCircle(CPoint pM, double);
+    CCircle(const CCircle&);
+    ~CCircle();
     void set(double, double, double);
     void list();
 };
