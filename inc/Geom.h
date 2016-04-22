@@ -11,7 +11,15 @@
 #include <string>
 using namespace std;
 
+class CLine;
+class CRectangle;
+class CCircle;
+
 class CPoint {
+  friend class CLine;
+  friend class CRectangle;
+  friend class CCircle;
+
   private:
     double X;
     double Y;
@@ -24,6 +32,7 @@ class CPoint {
     CPoint(double, double);
     CPoint(const CPoint&);
     ~CPoint();
+
     void set(double, double);
     void list();
 };
@@ -39,8 +48,10 @@ class CLine {
 
     CLine();
     CLine(double, double, double, double);
-    CLine(CPoint p1, CPoint p2);
+    CLine(CPoint, CPoint);
     CLine(const CLine&);
+    CLine& operator=(const CLine&);
+    CLine operator+(const CLine&);
     ~CLine();
     void set(double, double, double, double);
     void list();
@@ -57,8 +68,9 @@ class CRectangle {
 
     CRectangle();
     CRectangle(double, double, double, double);
-    CRectangle(CPoint p1, CPoint p2);
+    CRectangle(CPoint, CPoint);
     CRectangle(const CRectangle&);
+    CRectangle operator+(const CRectangle&);
     ~CRectangle();
     void set(double, double, double, double);
     void list();
@@ -75,11 +87,14 @@ class CCircle {
 
     CCircle();
     CCircle(double, double, double);
-    CCircle(CPoint pM, double);
+    CCircle(CPoint, double);
     CCircle(const CCircle&);
+    CCircle operator+(const CCircle&);
     ~CCircle();
     void set(double, double, double);
     void list();
 };
+
+
 
 #endif /* GEOM_H_ */

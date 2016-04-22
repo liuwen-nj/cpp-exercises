@@ -167,6 +167,13 @@ int main() {
   C4.list();
   listNumbers();
 
+  CLine l1 (0, 0, 2, 2);
+  CLine l2 (0, 0, 2, -1);
+  CLine l3;
+  l3 = l1 + l2;
+
+  l3.list();
+
   // getAndHandleUserInput();
 
   cout << "Quitting program..";

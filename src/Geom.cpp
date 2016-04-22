@@ -6,6 +6,8 @@
  */
 
 #include <iostream>
+#include <cmath>
+#include <algorithm>
 #include "../inc/Geom.h"
 using namespace std;
 
@@ -74,10 +76,37 @@ CLine::CLine(CPoint p1, CPoint p2) {
   P2 = p2;
 }
 
+// copy constructor
+
 CLine::CLine(const CLine& obj) {
   ulCount++;
   P1 = obj.P1;
   P2 = obj.P2;
+}
+
+// assignment operator
+
+CLine& CLine::operator=(const CLine& cLine) {
+  P1 = cLine.P1;
+  P2 = cLine.P2;
+  return *this;
+}
+
+// + operator implemented as vector addition c = a + b; assumes that starting point of line c will be the same as starting point of line a
+
+CLine CLine::operator+(const CLine& cLine) {
+  // create points of new line
+  CPoint C1, C2;
+
+  // calculate delta values of line B to calculate new end point below
+  float dx = cLine.P2.X - cLine.P1.X;
+  float dy = cLine.P2.Y - cLine.P1.Y;
+
+  // set coordinates of new points
+  C1.set(this->P1.X, this->P1.Y); // new line will start from P1 of line A
+  C2.set(this->P2.X + dx, this->P2.Y + dy);
+
+  return CLine(C1, C2);
 }
 
 // destructor
@@ -128,10 +157,23 @@ CRectangle::CRectangle(CPoint p1, CPoint p2) {
   P2 = p2;
 }
 
+// copy constructor
+
 CRectangle::CRectangle(const CRectangle& obj) {
   ulCount++;
   P1 = obj.P1;
   P2 = obj.P2;
+}
+
+// operator +: implemented as bounding box for both rectangles
+
+CRectangle CRectangle::operator+(const CRectangle& cRectangle) {
+  float minX = min({this->P1.X, this->P2.X, cRectangle.P1.X, cRectangle.P2.X});
+  float maxX = max({this->P1.X, this->P2.X, cRectangle.P1.X, cRectangle.P2.X});
+  float minY = min({this->P1.Y, this->P2.Y, cRectangle.P1.Y, cRectangle.P2.Y});
+  float maxY = max({this->P1.Y, this->P2.Y, cRectangle.P1.Y, cRectangle.P2.Y});
+
+  return CRectangle(CPoint(minX, maxY), CPoint(maxX, minY));
 }
 
 // destructor
@@ -182,10 +224,28 @@ CCircle::CCircle(CPoint m, double radius) {
   R = radius;
 }
 
+// copy constructor
+
 CCircle::CCircle(const CCircle& obj) {
   ulCount++;
   PM = obj.PM;
   R = obj.R;
+}
+
+// operator +: implemented as bounding box for both circles
+
+CCircle CCircle::operator+(const CCircle& cCircle) {
+  // calculate coordinates of new center point
+  float M_X = (this->PM.X + cCircle.PM.X) / 2;
+  float M_Y = (this->PM.Y + cCircle.PM.Y) / 2;
+
+  // calculate distance between new center point and old center points
+  float dM = sqrt(pow(this->PM.X - M_X, 2) + pow(this->PM.Y - M_Y, 2));
+
+  // determine the larger of the 2 old radius
+  float maxR = max(this->R, cCircle.R);
+
+  return CCircle(CPoint(M_X, M_Y), dM+maxR);
 }
 
 // destructor
