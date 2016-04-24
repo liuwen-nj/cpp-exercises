@@ -8,8 +8,14 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
+
+#include <GL/glew.h>
+#include <FL/glut.H>
+
 #include "../inc/Geom.h"
+#include "../inc/Drawing.h"
 using namespace std;
+
 
 // CPoint //////////////////////////////////////
 
@@ -31,6 +37,24 @@ CPoint::CPoint(const CPoint& obj) {
   Y = obj.Y;
 }
 
+// operator +
+
+CPoint CPoint::operator+(const CPoint& obj) {
+	float x = this->X + obj.X;
+	float y = this->Y + obj.Y;
+
+	return CPoint(x, y);
+}
+
+// operator -
+
+CPoint CPoint::operator-(const CPoint& obj) {
+	float x = this->X - obj.X;
+	float y = this->Y - obj.Y;
+
+	return CPoint(x, y);
+}
+
 // destructor
 
 CPoint::~CPoint() {
@@ -46,6 +70,19 @@ void CPoint::set(double coordinateX, double coordinateY) {
 
 void CPoint::list() {
   cout << "CPoint " << " [x=" << X << "; y=" << Y << "]" << endl;
+}
+
+void CPoint::draw(void) {
+	// define the size of cross
+	static const float crosslength = 5;
+
+	// draw the cross using two lines
+	glBegin(GL_LINES);
+	glVertex2f(X - crosslength, Y);
+	glVertex2f(X + crosslength + 1, Y);
+	glVertex2f(X, Y - (crosslength + 1));
+	glVertex2f(X, Y + crosslength);
+	glEnd();
 }
 
 // static functions and variables
@@ -129,6 +166,13 @@ void CLine::list() {
   cout << "}" << endl;
 }
 
+void CLine::draw() {
+	glBegin(GL_LINES);
+	glVertex2f(P1.X, P1.Y);
+	glVertex2f(P2.X, P2.Y);
+	glEnd();
+}
+
 // static functions and variables
 
 unsigned long CLine::ulCount = 0;
@@ -168,10 +212,10 @@ CRectangle::CRectangle(const CRectangle& obj) {
 // operator +: implemented as bounding box for both rectangles
 
 CRectangle CRectangle::operator+(const CRectangle& cRectangle) {
-  float minX = min({this->P1.X, this->P2.X, cRectangle.P1.X, cRectangle.P2.X});
-  float maxX = max({this->P1.X, this->P2.X, cRectangle.P1.X, cRectangle.P2.X});
-  float minY = min({this->P1.Y, this->P2.Y, cRectangle.P1.Y, cRectangle.P2.Y});
-  float maxY = max({this->P1.Y, this->P2.Y, cRectangle.P1.Y, cRectangle.P2.Y});
+  float minX = min(this->P1.X, min(this->P2.X, min(cRectangle.P1.X, cRectangle.P2.X)));
+  float maxX = max(this->P1.X, max(this->P2.X, max(cRectangle.P1.X, cRectangle.P2.X)));
+  float minY = min(this->P1.Y, min(this->P2.Y, min(cRectangle.P1.Y, cRectangle.P2.Y)));
+  float maxY = max(this->P1.Y, max(this->P2.Y, max(cRectangle.P1.Y, cRectangle.P2.Y)));
 
   return CRectangle(CPoint(minX, maxY), CPoint(maxX, minY));
 }
@@ -194,6 +238,10 @@ void CRectangle::list() {
   P1.list();
   P2.list();
   cout << "}" << endl;
+}
+
+void CRectangle::draw() {
+	glRectf(P1.X, P1.Y, P2.X, P2.Y);
 }
 
 // static functions and variables
@@ -235,17 +283,27 @@ CCircle::CCircle(const CCircle& obj) {
 // operator +: implemented as bounding box for both circles
 
 CCircle CCircle::operator+(const CCircle& cCircle) {
-  // calculate coordinates of new center point
-  float M_X = (this->PM.X + cCircle.PM.X) / 2;
-  float M_Y = (this->PM.Y + cCircle.PM.Y) / 2;
+	
+	// Circle 1 = this
+	// Circle 2 = cCircle
 
-  // calculate distance between new center point and old center points
-  float dM = sqrt(pow(this->PM.X - M_X, 2) + pow(this->PM.Y - M_Y, 2));
+	// calculate distance between the two center points
+	float X1X2 = cCircle.PM.X - this->PM.X;
+	float Y1Y2 = cCircle.PM.Y - this->PM.Y;
+	float dM1M2 = sqrt(pow(X1X2, 2) + pow(Y1Y2, 2));
+	
+	// calculate radius of bounding circle
+	float R_bounding = (this->R + cCircle.R + dM1M2) / 2;
 
-  // determine the larger of the 2 old radius
-  float maxR = max(this->R, cCircle.R);
+	// calculate coordinates of farest away point to circle 2 on circumference of cirlce 1
+	float F_X = this->PM.X - this->R * (X1X2 / dM1M2);
+	float F_Y = this->PM.Y - this->R * (Y1Y2 / dM1M2);
 
-  return CCircle(CPoint(M_X, M_Y), dM+maxR);
+	// calculate coordinates of center point of bounding circle
+	float PM_bounding_x = F_X + R_bounding * (X1X2 / dM1M2);
+	float PM_bounding_y = F_Y + R_bounding * (Y1Y2 / dM1M2);
+
+	return CCircle(CPoint(PM_bounding_x, PM_bounding_y), R_bounding);
 }
 
 // destructor
@@ -266,6 +324,13 @@ void CCircle::list() {
   PM.list();
   cout << "R = " << R << endl;
   cout << "}" << endl;
+}
+
+void CCircle::draw() {
+	glPushMatrix();
+	glTranslatef((GLfloat)PM.X, (GLfloat)PM.Y, 0.0);
+	gluDisk(gluNewQuadric(), R, R, 100, 1);
+	glPopMatrix();
 }
 
 // static functions and variables

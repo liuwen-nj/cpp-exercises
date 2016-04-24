@@ -37,7 +37,40 @@ using namespace std;
 void CDrawing::displayDrawing( EViewMode mode )
 ///////////////////////////////////////////////////////////////////////////////
 {
-	// TODO: insert code to draw and list figures
+	CLine l1(100, 100, 225, 200);
+	CLine l2(105, 123, 140, 250);
+	CLine l3;
+	l3 = l1 + l2;
+	
+	l1.draw();
+	l2.draw();
+	l3.draw();
+
+	CLine l4(400, 400, 500, 500);
+	CLine l5(400, 400, 500, 300);
+	CLine l6 = l4 + l5;
+
+	l4.draw();
+	l5.draw();
+	l6.draw();
+	
+	CCircle c1(300, 200, 50);
+	CCircle c2(350, 200, 35);
+	CCircle c3;
+	c3 = c1 + c2;
+	
+	c1.draw();
+	c2.draw();
+	c3.draw();
+	
+	CRectangle r1(CPoint(30, 40), CPoint(70, 10));
+	CRectangle r2(CPoint(60, 60), CPoint(110, 30));
+	CRectangle r3;
+	r3 = r1 + r2;
+	
+	r1.draw();
+	r2.draw();
+	r3.draw();
 
 	// check for viewing mode
 	if ( mode == VIEW_DRAWING )

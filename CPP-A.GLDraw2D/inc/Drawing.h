@@ -15,12 +15,9 @@ version: 1.01
 // system includes ////////////////////////////////////////////////////////////
 #include <string>
 #include <vector>
+#include "Geom.h"
 using namespace std;
 
-
-
-// forward declaration ////////////////////////////////////////////////////////
-class CPoint;
 
 
 class CDrawing

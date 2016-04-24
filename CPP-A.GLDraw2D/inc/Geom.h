@@ -31,10 +31,13 @@ class CPoint {
     CPoint();
     CPoint(double, double);
     CPoint(const CPoint&);
+	CPoint operator+(const CPoint&);
+	CPoint operator-(const CPoint&);
     ~CPoint();
 
     void set(double, double);
     void list();
+	void draw();
 };
 
 class CLine {
@@ -53,8 +56,10 @@ class CLine {
     CLine& operator=(const CLine&);
     CLine operator+(const CLine&);
     ~CLine();
+
     void set(double, double, double, double);
     void list();
+	void draw();
 };
 
 class CRectangle {
@@ -72,8 +77,10 @@ class CRectangle {
     CRectangle(const CRectangle&);
     CRectangle operator+(const CRectangle&);
     ~CRectangle();
+
     void set(double, double, double, double);
     void list();
+	void draw();
 };
 
 class CCircle {
@@ -91,8 +98,10 @@ class CCircle {
     CCircle(const CCircle&);
     CCircle operator+(const CCircle&);
     ~CCircle();
+
     void set(double, double, double);
     void list();
+	void draw();
 };
 
 
