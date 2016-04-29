@@ -13,6 +13,8 @@ history: 1.00 - initial version of OpenGL drawing application
 
 // system includes ////////////////////////////////////////////////////////////
 #include <iostream>
+#include <time.h>
+#include <vector>
 using namespace std;
 
 
@@ -25,8 +27,13 @@ using namespace std;
 
 
 // static data definitions ////////////////////////////////////////////////////
+int CDrawing::WIDTH = 800;
+int CDrawing::HEIGTH = 600;
 
-
+void CDrawing::reportWindowSize(int width, int height) {
+  CDrawing::WIDTH = width;
+  CDrawing::HEIGTH = height;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // function: displayDrawing()
@@ -37,50 +44,117 @@ using namespace std;
 void CDrawing::displayDrawing( EViewMode mode )
 ///////////////////////////////////////////////////////////////////////////////
 {
-	CLine l1(100, 100, 225, 200);
-	CLine l2(105, 123, 140, 250);
-	CLine l3;
-	l3 = l1 + l2;
-	
-	l1.draw();
-	l2.draw();
-	l3.draw();
+  srand(time(NULL));
 
-	CLine l4(400, 400, 500, 500);
-	CLine l5(400, 400, 500, 300);
-	CLine l6 = l4 + l5;
+  const int pointAmount = 30;
+  CPoint points[pointAmount];
 
-	l4.draw();
-	l5.draw();
-	l6.draw();
-	
-	CCircle c1(300, 200, 50);
-	CCircle c2(350, 200, 35);
-	CCircle c3;
-	c3 = c1 + c2;
-	
-	c1.draw();
-	c2.draw();
-	c3.draw();
-	
-	CRectangle r1(CPoint(30, 40), CPoint(70, 10));
-	CRectangle r2(CPoint(60, 60), CPoint(110, 30));
-	CRectangle r3;
-	r3 = r1 + r2;
-	
-	r1.draw();
-	r2.draw();
-	r3.draw();
+  for (int i = 0; i < pointAmount; i++) {
+    points[i].set((double)(rand() % CDrawing::WIDTH), (double)(rand() % CDrawing::HEIGTH));
+  }
 
-	// check for viewing mode
-	if ( mode == VIEW_DRAWING )
-	{
-		// TODO: add code here to draw objects
-	}
-	else // VIEW_LISTING
-	{
-		// TODO: add code here to list objects
-	}
+  const int lineAmount = 10;
+  const int maxLineLength = 100;
+  vector<CLine> lines;
+
+  for (int i = 0; i < lineAmount; i++) {
+    float x1 = (float)(rand() % CDrawing::WIDTH);
+    float y1 = (float)(rand() % CDrawing::HEIGTH);
+
+    float x2, y2, lineLength;
+
+    do {
+      x2 = (float)(rand() % CDrawing::WIDTH);
+      y2 = (float)(rand() % CDrawing::HEIGTH);
+      lineLength = sqrt( pow(x1-x2,2) + pow(y1-y2,2) );
+    } while ( lineLength > maxLineLength );
+
+    CPoint p1{ x1, y1 };
+    CPoint p2{ x2, y2 };
+
+    lines.push_back(CLine{ p1, p2 });
+  }
+
+  const int rectangleAmount = 5;
+  const int maxSideLength = 100;
+  vector<CRectangle> rectangles;
+
+  for (int i = 0; i < rectangleAmount; i++) {
+    float x1 = (float) (rand() % CDrawing::WIDTH);
+    float y1 = (float) (rand() % CDrawing::HEIGTH);
+    CPoint p1{ x1, y1 };
+
+    float x2, y2;
+    do {
+      x2 = (float) (rand() % CDrawing::WIDTH);
+    } while (abs(x1 - x2) > maxSideLength);
+
+    do {
+      y2 = (float)(rand() % CDrawing::HEIGTH);
+    } while (abs(y1 - y2) > maxSideLength);
+
+    CPoint p2{ x2, y2 };
+
+    rectangles.push_back(CRectangle{ p1, p2 });
+  }
+
+  const int circleAmount = 5;
+  const int maxRadius = 100;
+  vector<CCircle> circles;
+
+  for (int i = 0; i < circleAmount; i++) {
+    int radius = rand() % maxRadius;
+    float x, y;
+
+    do {
+      x = (float)(rand() % (CDrawing::WIDTH - radius));
+      y = (float)(rand() % (CDrawing::HEIGTH - radius));
+    } while (x - radius < 0 || y - radius < 0);
+    
+    CPoint pM{ x, y };
+
+    circles.push_back(CCircle(pM, radius));
+  }
+
+  switch (mode) {
+  case VIEW_DRAWING:
+    for (int i = 0; i < pointAmount; i++) {
+      points[i].draw();
+    }
+    for (int i = 0; i < lineAmount; i++) {
+      lines[i].draw();
+    }
+    for (int i = 0; i < rectangleAmount; i++) {
+      rectangles[i].draw();
+    }
+    for (int i = 0; i < circleAmount; i++) {
+      circles[i].draw();
+    }
+    cout << endl << "Amount of points: ";
+    CPoint::listCount();
+    cout << endl << "Amount of lines: ";
+    CLine::listCount();
+    cout << endl << "Amount of rectangles: ";
+    CRectangle::listCount();
+    cout << endl << "Amount of circles: ";
+    CCircle::listCount();
+    break;
+
+  case CDrawing::VIEW_LISTING:
+    for (int i = 0; i < pointAmount; i++) {
+      points[i].list();
+    }
+    for (int i = 0; i < lineAmount; i++) {
+      lines[i].list();
+    }
+    for (int i = 0; i < rectangleAmount; i++) {
+      rectangles[i].list();
+    }
+    for (int i = 0; i < circleAmount; i++) {
+      circles[i].list();
+    }
+    break;
+  }
 }
 // CDrawing::displayDrawing() /////////////////////////////////////////////////
 

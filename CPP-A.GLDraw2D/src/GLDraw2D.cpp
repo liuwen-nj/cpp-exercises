@@ -28,7 +28,6 @@ using namespace std;
 #include "../inc/CmdHandler.h"
 
 
-
 void glutDisplayCB(void)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 {
@@ -82,6 +81,8 @@ void initRendering()
 void glutResizeCB(int width, int height)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 {
+  CDrawing::reportWindowSize(width, height);
+
 	glViewport(0, 0, (GLsizei)width, (GLsizei)height);
 
 	glMatrixMode(GL_PROJECTION);
@@ -137,7 +138,7 @@ int main(int argc, char** argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(100,100);
-	glutInitWindowSize(800,600);
+	glutInitWindowSize(CDrawing::WIDTH, CDrawing::HEIGTH);
 
 	glutCreateWindow("GLDraw2D");
 
