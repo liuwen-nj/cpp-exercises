@@ -23,7 +23,10 @@ using namespace std;
 // application includes ///////////////////////////////////////////////////////
 #include "../../_COMMON/inc/TrackBall.h"
 #include "../../_COMMON/inc/UtilFLTK.h"
-#include "../inc/Geom.h"
+#include "../inc/Point.h"
+#include "../inc/Line.h"
+#include "../inc/Rectangle.h"
+#include "../inc/Circle.h"
 #include "../inc/Drawing.h"
 #include "../inc/CmdHandler.h"
 

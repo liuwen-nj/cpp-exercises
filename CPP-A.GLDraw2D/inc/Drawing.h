@@ -15,7 +15,10 @@ version: 1.01
 // system includes ////////////////////////////////////////////////////////////
 #include <string>
 #include <vector>
-#include "Geom.h"
+#include "Point.h"
+#include "Line.h"
+#include "Rectangle.h"
+#include "Circle.h"
 using namespace std;
 
 

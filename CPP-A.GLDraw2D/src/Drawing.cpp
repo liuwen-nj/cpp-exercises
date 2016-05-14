@@ -13,6 +13,7 @@ history: 1.00 - initial version of OpenGL drawing application
 
 // system includes ////////////////////////////////////////////////////////////
 #include <iostream>
+#include <algorithm>
 #include <time.h>
 #include <vector>
 using namespace std;
@@ -22,7 +23,10 @@ using namespace std;
 // application includes ///////////////////////////////////////////////////////
 #include "../../_COMMON/inc/UtilFLTK.h"
 #include "../inc/Drawing.h"
-#include "../inc/Geom.h"
+#include "../inc/Point.h"
+#include "../inc/Line.h"
+#include "../inc/Rectangle.h"
+#include "../inc/Circle.h"
 
 
 
@@ -31,8 +35,8 @@ int CDrawing::WIDTH = 800;
 int CDrawing::HEIGTH = 600;
 
 void CDrawing::reportWindowSize(int width, int height) {
-  CDrawing::WIDTH = width;
-  CDrawing::HEIGTH = height;
+  CDrawing::WIDTH = max(width, 200);
+  CDrawing::HEIGTH = max(height, 200);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,6 +48,19 @@ void CDrawing::reportWindowSize(int width, int height) {
 void CDrawing::displayDrawing( EViewMode mode )
 ///////////////////////////////////////////////////////////////////////////////
 {
+  
+  // delete from here
+
+  CPoint p1 { 5.3, 5.4 };
+  
+  CPoint p2;
+  p2 = p1;
+
+  CPoint p3 = p1;
+
+  // to here
+  
+  
   srand(time(NULL));
 
   const int pointAmount = 30;
