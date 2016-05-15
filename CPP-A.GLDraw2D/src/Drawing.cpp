@@ -36,6 +36,7 @@ int CDrawing::WIDTH = 800;
 int CDrawing::HEIGTH = 600;
 
 // member variables
+bool initializedRandomFigures = false;
 vector<CFigure*> randomFigures;
 vector<CFigure*> userFigures;
 vector<CFigure*>::iterator pos;
@@ -110,83 +111,11 @@ void CDrawing::displayDrawing( EViewMode mode )
   CCircle::listCount();
 
   // to here */
-  
-  const int pointAmount = 30;
-  const int lineAmount = 10;
-  const int rectangleAmount = 5;
-  const int circleAmount = 5;
 
-  const int maxLineLength = 100;
-  const int maxRectangleSideLength = 100;
-  const int maxCircleRadius = 100;
-
-  srand(time(NULL));
-
-  // add random points to vector
-  for (int i = 0; i < pointAmount; i++) {
-    double x = (double)(rand() % CDrawing::WIDTH);
-    double y = (double)(rand() % CDrawing::HEIGTH);
-    CPoint* p = new CPoint(x, y);
-    randomFigures.push_back(p);
+  if (!initializedRandomFigures) {
+    addRandomFigures();
+    initializedRandomFigures = true;
   }
-
-  // add random lines to vector
-  for (int i = 0; i < lineAmount; i++) {
-    float x1 = (float)(rand() % CDrawing::WIDTH);
-    float y1 = (float)(rand() % CDrawing::HEIGTH);
-
-    float x2, y2, lineLength;
-
-    do {
-      x2 = (float)(rand() % CDrawing::WIDTH);
-      y2 = (float)(rand() % CDrawing::HEIGTH);
-      lineLength = sqrt( pow(x1-x2,2) + pow(y1-y2,2) );
-    } while ( lineLength > maxLineLength );
-
-    CPoint p1{ x1, y1 };
-    CPoint p2{ x2, y2 };
-    CLine* l = new CLine(p1, p2);
-
-    randomFigures.push_back(l);
-  }
-
-  // add random rectangles to vector
-  for (int i = 0; i < rectangleAmount; i++) {
-    float x1 = (float) (rand() % CDrawing::WIDTH);
-    float y1 = (float) (rand() % CDrawing::HEIGTH);
-    CPoint p1{ x1, y1 };
-
-    float x2, y2;
-    do {
-      x2 = (float) (rand() % CDrawing::WIDTH);
-    } while (abs(x1 - x2) > maxRectangleSideLength);
-
-    do {
-      y2 = (float)(rand() % CDrawing::HEIGTH);
-    } while (abs(y1 - y2) > maxRectangleSideLength);
-
-    CPoint p2{ x2, y2 };
-    CRectangle* r = new CRectangle(p1, p2);
-
-    randomFigures.push_back(r);
-  }
-
-  // add random circles to vector
-  for (int i = 0; i < circleAmount; i++) {
-    int radius = rand() % maxCircleRadius;
-    float x, y;
-
-    do {
-      x = (float)(rand() % (CDrawing::WIDTH - radius));
-      y = (float)(rand() % (CDrawing::HEIGTH - radius));
-    } while (x - radius < 0 || y - radius < 0);
-    
-    CPoint pM{ x, y };
-    CCircle* c = new CCircle(pM, radius);
-
-    randomFigures.push_back(c);
-  }
-
   
   switch (mode) {
   
@@ -214,16 +143,92 @@ void CDrawing::displayDrawing( EViewMode mode )
     break;
   }
 
-  // delete dynamically created figures and empty vector
+}
+// CDrawing::displayDrawing() /////////////////////////////////////////////////
+
+void CDrawing::addRandomFigures(void) {
+  const int pointAmount = 30;
+  const int lineAmount = 10;
+  const int rectangleAmount = 5;
+  const int circleAmount = 5;
+
+  const int maxLineLength = 100;
+  const int maxRectangleSideLength = 100;
+  const int maxCircleRadius = 100;
+
+  // delete dynamically created figures and empty vector, if already present
   for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
     delete (*pos);
   }
   randomFigures.clear();
 
+  srand(time(NULL));
+
+  // add random points to vector
+  for (int i = 0; i < pointAmount; i++) {
+    double x = (double)(rand() % CDrawing::WIDTH);
+    double y = (double)(rand() % CDrawing::HEIGTH);
+    CPoint* p = new CPoint(x, y);
+    randomFigures.push_back(p);
+  }
+
+  // add random lines to vector
+  for (int i = 0; i < lineAmount; i++) {
+    float x1 = (float)(rand() % CDrawing::WIDTH);
+    float y1 = (float)(rand() % CDrawing::HEIGTH);
+
+    float x2, y2, lineLength;
+
+    do {
+      x2 = (float)(rand() % CDrawing::WIDTH);
+      y2 = (float)(rand() % CDrawing::HEIGTH);
+      lineLength = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+    } while (lineLength > maxLineLength);
+
+    CPoint p1{ x1, y1 };
+    CPoint p2{ x2, y2 };
+    CLine* l = new CLine(p1, p2);
+
+    randomFigures.push_back(l);
+  }
+
+  // add random rectangles to vector
+  for (int i = 0; i < rectangleAmount; i++) {
+    float x1 = (float)(rand() % CDrawing::WIDTH);
+    float y1 = (float)(rand() % CDrawing::HEIGTH);
+    CPoint p1{ x1, y1 };
+
+    float x2, y2;
+    do {
+      x2 = (float)(rand() % CDrawing::WIDTH);
+    } while (abs(x1 - x2) > maxRectangleSideLength);
+
+    do {
+      y2 = (float)(rand() % CDrawing::HEIGTH);
+    } while (abs(y1 - y2) > maxRectangleSideLength);
+
+    CPoint p2{ x2, y2 };
+    CRectangle* r = new CRectangle(p1, p2);
+
+    randomFigures.push_back(r);
+  }
+
+  // add random circles to vector
+  for (int i = 0; i < circleAmount; i++) {
+    int radius = rand() % maxCircleRadius;
+    float x, y;
+
+    do {
+      x = (float)(rand() % (CDrawing::WIDTH - radius));
+      y = (float)(rand() % (CDrawing::HEIGTH - radius));
+    } while (x - radius < 0 || y - radius < 0);
+
+    CPoint pM{ x, y };
+    CCircle* c = new CCircle(pM, radius);
+
+    randomFigures.push_back(c);
+  }
 }
-// CDrawing::displayDrawing() /////////////////////////////////////////////////
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // function: clearDrawing()

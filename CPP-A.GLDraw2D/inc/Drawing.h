@@ -34,6 +34,7 @@ public: // types
 public: // functions
   static void reportWindowSize(int width, int height);
 	static void displayDrawing( EViewMode mode =  VIEW_DRAWING );
+  static void addRandomFigures(void);
 	static void clearDrawing( void );
 	static void appendFigure( EFigType figtype, const CPoint& p1, const CPoint& p2 );
 	static void removeFigure( void );
