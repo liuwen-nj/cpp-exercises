@@ -45,6 +45,11 @@ CCircle::CCircle(CPoint m, double radius) {
   R = radius;
 }
 
+CCircle::CCircle(CPoint p1, CPoint p2) {
+  ulCount++;
+  set(p1, p2);
+}
+
 // copy constructor
 
 CCircle::CCircle(const CCircle& obj) {
@@ -90,6 +95,12 @@ CCircle::~CCircle() {
 void CCircle::set(double x, double y, double radius) {
   PM.set(x, y);
   R = radius;
+}
+
+void CCircle::set(CPoint p1, CPoint p2) {
+  PM.set(p1.X, p1.Y);
+  float dP1P2 = sqrt(pow(p2.X-p1.X, 2) + pow(p2.Y-p1.Y, 2));
+  R = dP1P2;
 }
 
 void CCircle::list() {

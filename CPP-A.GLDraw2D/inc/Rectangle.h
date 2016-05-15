@@ -31,6 +31,7 @@ class CRectangle : virtual public CFigure {
     ~CRectangle();
 
     void set(double, double, double, double);
+    void set(CPoint, CPoint);
     void list(void);
 	  void draw(void);
 };

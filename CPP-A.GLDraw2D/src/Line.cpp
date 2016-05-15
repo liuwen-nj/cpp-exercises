@@ -41,16 +41,14 @@ CLine::CLine(double x1, double y1, double x2, double y2) {
 
 CLine::CLine(CPoint p1, CPoint p2) {
   ulCount++;
-  P1 = p1;
-  P2 = p2;
+  set(p1, p2);
 }
 
 // copy constructor
 
 CLine::CLine(const CLine& obj) {
   ulCount++;
-  P1 = obj.P1;
-  P2 = obj.P2;
+  set(obj.P1, obj.P2);
 }
 
 // assignment operator
@@ -89,6 +87,11 @@ CLine::~CLine() {
 void CLine::set(double x1, double y1, double x2, double y2) {
   P1.set(x1, y1);
   P2.set(x2, y2);
+}
+
+void CLine::set(CPoint p1, CPoint p2) {
+  P1.set(p1.X, p1.Y);
+  P2.set(p2.X, p2.Y);
 }
 
 void CLine::list() {

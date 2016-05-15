@@ -26,11 +26,13 @@ class CCircle : virtual public CFigure {
     CCircle();
     CCircle(double, double, double);
     CCircle(CPoint, double);
+    CCircle(CPoint, CPoint);
     CCircle(const CCircle&);
     CCircle operator+(const CCircle&);
     ~CCircle();
 
     void set(double, double, double);
+    void set(CPoint, CPoint);
     void list(void);
 	  void draw(void);
 };

@@ -32,6 +32,7 @@ class CLine : virtual public CFigure {
     ~CLine();
 
     void set(double, double, double, double);
+    void set(CPoint, CPoint);
     void list(void);
 	  void draw(void);
 };

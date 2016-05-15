@@ -16,6 +16,7 @@ history: 1.00 - initial version of OpenGL drawing application
 #include <algorithm>
 #include <time.h>
 #include <vector>
+
 using namespace std;
 
 
@@ -35,7 +36,8 @@ int CDrawing::WIDTH = 800;
 int CDrawing::HEIGTH = 600;
 
 // member variables
-vector<CFigure*> figures;
+vector<CFigure*> randomFigures;
+vector<CFigure*> userFigures;
 vector<CFigure*>::iterator pos;
 
 
@@ -125,7 +127,7 @@ void CDrawing::displayDrawing( EViewMode mode )
     double x = (double)(rand() % CDrawing::WIDTH);
     double y = (double)(rand() % CDrawing::HEIGTH);
     CPoint* p = new CPoint(x, y);
-    figures.push_back(p);
+    randomFigures.push_back(p);
   }
 
   // add random lines to vector
@@ -145,7 +147,7 @@ void CDrawing::displayDrawing( EViewMode mode )
     CPoint p2{ x2, y2 };
     CLine* l = new CLine(p1, p2);
 
-    figures.push_back(l);
+    randomFigures.push_back(l);
   }
 
   // add random rectangles to vector
@@ -166,7 +168,7 @@ void CDrawing::displayDrawing( EViewMode mode )
     CPoint p2{ x2, y2 };
     CRectangle* r = new CRectangle(p1, p2);
 
-    figures.push_back(r);
+    randomFigures.push_back(r);
   }
 
   // add random circles to vector
@@ -182,16 +184,22 @@ void CDrawing::displayDrawing( EViewMode mode )
     CPoint pM{ x, y };
     CCircle* c = new CCircle(pM, radius);
 
-    figures.push_back(c);
+    randomFigures.push_back(c);
   }
 
   
   switch (mode) {
   
   case VIEW_DRAWING:
-    for (pos = figures.begin(); pos != figures.end(); pos++) {
+    // draw user generated figures
+    for (pos = userFigures.begin(); pos != userFigures.end(); pos++) {
       (*pos)->draw();
     }
+    // draw random figures
+    for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
+      (*pos)->draw();
+    }
+    // list total amount of generated figures
     CFigure::listCount();
     CPoint::listCount();
     CLine::listCount();
@@ -200,17 +208,17 @@ void CDrawing::displayDrawing( EViewMode mode )
     break;
 
   case CDrawing::VIEW_LISTING:
-    for (pos = figures.begin(); pos != figures.end(); pos++) {
+    for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
       (*pos)->list();
     }
     break;
   }
 
-  // delete figures
-  for (pos = figures.begin(); pos != figures.end(); pos++) {
+  // delete dynamically created figures and empty vector
+  for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
     delete (*pos);
   }
-  figures.clear();
+  randomFigures.clear();
 
 }
 // CDrawing::displayDrawing() /////////////////////////////////////////////////
@@ -240,7 +248,24 @@ void CDrawing::clearDrawing( void ) {
 void CDrawing::appendFigure(EFigType figtype, const CPoint& p1, const CPoint& p2)
 ///////////////////////////////////////////////////////////////////////////////
 {
-	// TODO: add code to append figure to list
+
+  switch (figtype) {
+  case FIG_POINT:
+    userFigures.push_back(new CPoint(p1));
+    break;
+
+  case FIG_LINE:
+    userFigures.push_back(new CLine(p1, p2));    
+    break;
+
+  case FIG_RECT:
+    userFigures.push_back(new CRectangle(p1, p2));
+    break;
+
+  case FIG_CIRCLE:
+    userFigures.push_back(new CCircle(p1, p2));
+    break;
+  }
 }
 // CDrawing::appendFigure() ///////////////////////////////////////////////////
 
@@ -254,7 +279,11 @@ void CDrawing::appendFigure(EFigType figtype, const CPoint& p1, const CPoint& p2
 void CDrawing::removeFigure( void )
 ///////////////////////////////////////////////////////////////////////////////
 {
-  // TODO
+  if (!userFigures.empty()) {
+    delete userFigures.back();
+    userFigures.pop_back();
+  }
+
 }
 // CDrawing::removeFigure() ///////////////////////////////////////////////////
 

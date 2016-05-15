@@ -1,6 +1,8 @@
 #ifndef _FIGURE_H_
 #define _FIGURE_H_
 
+class CPoint;
+
 class CFigure {
 private:
   static unsigned long ulCount;
