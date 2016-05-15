@@ -14,7 +14,7 @@
 using namespace std;
 
 
-class CLine : public CFigure {
+class CLine : virtual public CFigure {
   private:
     CPoint P1;
     CPoint P2;
@@ -32,8 +32,8 @@ class CLine : public CFigure {
     ~CLine();
 
     void set(double, double, double, double);
-    void list();
-	void draw();
+    void list(void);
+	  void draw(void);
 };
 
 #endif /* LINE_H_ */

@@ -14,7 +14,7 @@
 using namespace std;
 
 
-class CCircle : public CFigure {
+class CCircle : virtual public CFigure {
   private:
     CPoint PM;
     double R;
@@ -31,8 +31,8 @@ class CCircle : public CFigure {
     ~CCircle();
 
     void set(double, double, double);
-    void list();
-	void draw();
+    void list(void);
+	  void draw(void);
 };
 
 

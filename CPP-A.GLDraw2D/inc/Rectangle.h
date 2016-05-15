@@ -14,7 +14,7 @@
 using namespace std;
 
 
-class CRectangle : public CFigure {
+class CRectangle : virtual public CFigure {
   private:
     CPoint P1;
     CPoint P2;
@@ -31,8 +31,8 @@ class CRectangle : public CFigure {
     ~CRectangle();
 
     void set(double, double, double, double);
-    void list();
-	void draw();
+    void list(void);
+	  void draw(void);
 };
 
 

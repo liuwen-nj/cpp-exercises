@@ -23,7 +23,7 @@ using namespace std;
 unsigned long CPoint::ulCount = 0;
 
 void CPoint::listCount() {
-  cout << "# CPoints: " << ulCount << endl;
+  cout << "# CPoints: " << CPoint::ulCount << endl;
 }
 
 // constructors

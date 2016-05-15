@@ -16,7 +16,7 @@ class CLine;
 class CRectangle;
 class CCircle;
 
-class CPoint : public CFigure {
+class CPoint : virtual public CFigure {
   friend class CLine;
   friend class CRectangle;
   friend class CCircle;
@@ -37,8 +37,8 @@ class CPoint : public CFigure {
     ~CPoint();
 
     void set(double, double);
-    void list();
-	void draw();
+    void list(void);
+	  void draw(void);
 };
 
 #endif /* POINT_H_ */

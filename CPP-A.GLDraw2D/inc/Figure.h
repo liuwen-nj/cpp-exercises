@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef _FIGURE_H_
 #define _FIGURE_H_
 
@@ -12,10 +10,10 @@ public:
 
   CFigure();
   CFigure(const CFigure&);
-  ~CFigure();
+  virtual ~CFigure();
 
-  virtual void list() = 0;
-  virtual void draw() = 0;
+  virtual void list(void) = 0;
+  virtual void draw(void) = 0;
 };
 
 #endif

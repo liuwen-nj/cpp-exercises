@@ -24,7 +24,7 @@ using namespace std;
 unsigned long CRectangle::ulCount = 0;
 
 void CRectangle::listCount() {
-  cout << "# CRectangles: " << ulCount << endl;
+  cout << "# CRectangles: " << CRectangle::ulCount << endl;
 }
 
 // constructors

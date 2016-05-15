@@ -34,6 +34,11 @@ using namespace std;
 int CDrawing::WIDTH = 800;
 int CDrawing::HEIGTH = 600;
 
+// member variables
+vector<CFigure*> figures;
+vector<CFigure*>::iterator pos;
+
+
 void CDrawing::reportWindowSize(int width, int height) {
   CDrawing::WIDTH = max(width, 200);
   CDrawing::HEIGTH = max(height, 200);
@@ -49,31 +54,81 @@ void CDrawing::displayDrawing( EViewMode mode )
 ///////////////////////////////////////////////////////////////////////////////
 {
   
-  // delete from here
+  
+  /* // testing from here
 
   CPoint p1 { 5.3, 5.4 };
+
+  CFigure::listCount();
+  CPoint::listCount();
+  CLine::listCount();
+  CRectangle::listCount();
+  CCircle::listCount();
   
   CPoint p2;
   p2 = p1;
 
+  CFigure::listCount();
+  CPoint::listCount();
+  CLine::listCount();
+  CRectangle::listCount();
+  CCircle::listCount();
+
   CPoint p3 = p1;
 
-  // to here
+  CFigure::listCount();
+  CPoint::listCount();
+  CLine::listCount();
+  CRectangle::listCount();
+  CCircle::listCount();
+
+  CLine l1{ CPoint{1, 2}, CPoint(3, 4) };
+
+  CFigure::listCount();
+  CPoint::listCount();
+  CLine::listCount();
+  CRectangle::listCount();
+  CCircle::listCount();
+
+  CLine l2;
+  l2.set(5, 6, 7, 8);
+
+  CFigure::listCount();
+  CPoint::listCount();
+  CLine::listCount();
+  CRectangle::listCount();
+  CCircle::listCount();
+
+  CLine l3 = l1 + l2;
+
+  CFigure::listCount();
+  CPoint::listCount();
+  CLine::listCount();
+  CRectangle::listCount();
+  CCircle::listCount();
+
+  // to here */
   
-  
+  const int pointAmount = 30;
+  const int lineAmount = 10;
+  const int rectangleAmount = 5;
+  const int circleAmount = 5;
+
+  const int maxLineLength = 100;
+  const int maxRectangleSideLength = 100;
+  const int maxCircleRadius = 100;
+
   srand(time(NULL));
 
-  const int pointAmount = 30;
-  CPoint points[pointAmount];
-
+  // add random points to vector
   for (int i = 0; i < pointAmount; i++) {
-    points[i].set((double)(rand() % CDrawing::WIDTH), (double)(rand() % CDrawing::HEIGTH));
+    double x = (double)(rand() % CDrawing::WIDTH);
+    double y = (double)(rand() % CDrawing::HEIGTH);
+    CPoint* p = new CPoint(x, y);
+    figures.push_back(p);
   }
 
-  const int lineAmount = 10;
-  const int maxLineLength = 100;
-  vector<CLine> lines;
-
+  // add random lines to vector
   for (int i = 0; i < lineAmount; i++) {
     float x1 = (float)(rand() % CDrawing::WIDTH);
     float y1 = (float)(rand() % CDrawing::HEIGTH);
@@ -88,14 +143,12 @@ void CDrawing::displayDrawing( EViewMode mode )
 
     CPoint p1{ x1, y1 };
     CPoint p2{ x2, y2 };
+    CLine* l = new CLine(p1, p2);
 
-    lines.push_back(CLine{ p1, p2 });
+    figures.push_back(l);
   }
 
-  const int rectangleAmount = 5;
-  const int maxSideLength = 100;
-  vector<CRectangle> rectangles;
-
+  // add random rectangles to vector
   for (int i = 0; i < rectangleAmount; i++) {
     float x1 = (float) (rand() % CDrawing::WIDTH);
     float y1 = (float) (rand() % CDrawing::HEIGTH);
@@ -104,23 +157,21 @@ void CDrawing::displayDrawing( EViewMode mode )
     float x2, y2;
     do {
       x2 = (float) (rand() % CDrawing::WIDTH);
-    } while (abs(x1 - x2) > maxSideLength);
+    } while (abs(x1 - x2) > maxRectangleSideLength);
 
     do {
       y2 = (float)(rand() % CDrawing::HEIGTH);
-    } while (abs(y1 - y2) > maxSideLength);
+    } while (abs(y1 - y2) > maxRectangleSideLength);
 
     CPoint p2{ x2, y2 };
+    CRectangle* r = new CRectangle(p1, p2);
 
-    rectangles.push_back(CRectangle{ p1, p2 });
+    figures.push_back(r);
   }
 
-  const int circleAmount = 5;
-  const int maxRadius = 100;
-  vector<CCircle> circles;
-
+  // add random circles to vector
   for (int i = 0; i < circleAmount; i++) {
-    int radius = rand() % maxRadius;
+    int radius = rand() % maxCircleRadius;
     float x, y;
 
     do {
@@ -129,49 +180,38 @@ void CDrawing::displayDrawing( EViewMode mode )
     } while (x - radius < 0 || y - radius < 0);
     
     CPoint pM{ x, y };
+    CCircle* c = new CCircle(pM, radius);
 
-    circles.push_back(CCircle(pM, radius));
+    figures.push_back(c);
   }
 
+  
   switch (mode) {
+  
   case VIEW_DRAWING:
-    for (int i = 0; i < pointAmount; i++) {
-      points[i].draw();
+    for (pos = figures.begin(); pos != figures.end(); pos++) {
+      (*pos)->draw();
     }
-    for (int i = 0; i < lineAmount; i++) {
-      lines[i].draw();
-    }
-    for (int i = 0; i < rectangleAmount; i++) {
-      rectangles[i].draw();
-    }
-    for (int i = 0; i < circleAmount; i++) {
-      circles[i].draw();
-    }
-    cout << endl << "Amount of points: ";
+    CFigure::listCount();
     CPoint::listCount();
-    cout << endl << "Amount of lines: ";
     CLine::listCount();
-    cout << endl << "Amount of rectangles: ";
     CRectangle::listCount();
-    cout << endl << "Amount of circles: ";
     CCircle::listCount();
     break;
 
   case CDrawing::VIEW_LISTING:
-    for (int i = 0; i < pointAmount; i++) {
-      points[i].list();
-    }
-    for (int i = 0; i < lineAmount; i++) {
-      lines[i].list();
-    }
-    for (int i = 0; i < rectangleAmount; i++) {
-      rectangles[i].list();
-    }
-    for (int i = 0; i < circleAmount; i++) {
-      circles[i].list();
+    for (pos = figures.begin(); pos != figures.end(); pos++) {
+      (*pos)->list();
     }
     break;
   }
+
+  // delete figures
+  for (pos = figures.begin(); pos != figures.end(); pos++) {
+    delete (*pos);
+  }
+  figures.clear();
+
 }
 // CDrawing::displayDrawing() /////////////////////////////////////////////////
 
@@ -183,10 +223,8 @@ void CDrawing::displayDrawing( EViewMode mode )
 //           if the user clears the window or opens an existing drawing from
 //           a file.
 ///////////////////////////////////////////////////////////////////////////////
-void CDrawing::clearDrawing( void )
-///////////////////////////////////////////////////////////////////////////////
-{
-	// TODO: insert code to clear drawing data
+void CDrawing::clearDrawing( void ) {
+  // TODO
 }
 // CDrawing::clearDrawing() ///////////////////////////////////////////////////
 
@@ -216,7 +254,7 @@ void CDrawing::appendFigure(EFigType figtype, const CPoint& p1, const CPoint& p2
 void CDrawing::removeFigure( void )
 ///////////////////////////////////////////////////////////////////////////////
 {
-	// TODO: add code to remove figure from list
+  // TODO
 }
 // CDrawing::removeFigure() ///////////////////////////////////////////////////
 

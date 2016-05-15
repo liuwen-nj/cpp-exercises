@@ -9,7 +9,7 @@ using namespace std;
 unsigned long CFigure::ulCount = 0;
 
 void CFigure::listCount() {
-  cout << "# CFigures: " << CFigure::ulCount;
+  cout << "# CFigures: " << CFigure::ulCount << endl;
 }
 
 // default constructor

@@ -24,7 +24,7 @@ using namespace std;
 unsigned long CLine::ulCount = 0;
 
 void CLine::listCount() {
-  cout << "# CLines: " << ulCount << endl;
+  cout << "# CLines: " << CLine::ulCount << endl;
 }
 
 //constructors
