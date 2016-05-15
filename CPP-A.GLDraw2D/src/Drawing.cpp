@@ -237,7 +237,17 @@ void CDrawing::addRandomFigures(void) {
 //           a file.
 ///////////////////////////////////////////////////////////////////////////////
 void CDrawing::clearDrawing( void ) {
-  // TODO
+  // delete random figures
+  for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
+    delete (*pos);
+  }
+  randomFigures.clear();
+
+  // delete user figures
+  for (pos = userFigures.begin(); pos != userFigures.end(); pos++) {
+    delete (*pos);
+  }
+  userFigures.clear();
 }
 // CDrawing::clearDrawing() ///////////////////////////////////////////////////
 
