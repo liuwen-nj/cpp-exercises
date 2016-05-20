@@ -60,7 +60,8 @@ CCircle::CCircle(const CCircle& obj) {
 
 // operator +: implemented as bounding box for both circles
 
-CCircle CCircle::operator+(const CCircle& cCircle) {
+CCircle CCircle::operator+(const CCircle& cCircle) const
+{
 	
 	// Circle 1 = this
 	// Circle 2 = cCircle
@@ -112,7 +113,24 @@ void CCircle::list() {
 
 void CCircle::draw() {
 	glPushMatrix();
-	glTranslatef((GLfloat)PM.X, (GLfloat)PM.Y, 0.0);
+	glTranslatef(static_cast<GLfloat>(PM.X), static_cast<GLfloat>(PM.Y), 0.0);
 	gluDisk(gluNewQuadric(), R, R, 100, 1);
 	glPopMatrix();
+}
+
+void CCircle::load(istream* stream) {
+  string x, y, r;
+  getline(*stream, x);
+  getline(*stream, y);
+  getline(*stream, r);
+
+  set(stod(x), stod(y), stod(r));
+}
+
+void CCircle::save(std::ostream* stream) {
+  CDrawing::EFigType myType = CDrawing::FIG_CIRCLE;
+  (*stream) << myType << endl;
+  (*stream) << PM.X << endl;
+  (*stream) << PM.Y << endl;
+  (*stream) << R << endl;
 }

@@ -61,7 +61,8 @@ CLine& CLine::operator=(const CLine& cLine) {
 
 // + operator implemented as vector addition c = a + b; assumes that starting point of line c will be the same as starting point of line a
 
-CLine CLine::operator+(const CLine& cLine) {
+CLine CLine::operator+(const CLine& cLine) const
+{
   // create points of new line
   CPoint C1, C2;
 
@@ -106,4 +107,23 @@ void CLine::draw() {
 	glVertex2f(P1.X, P1.Y);
 	glVertex2f(P2.X, P2.Y);
 	glEnd();
+}
+
+void CLine::load(istream* stream) {
+  string x1, y1, x2, y2;
+  getline(*stream, x1);
+  getline(*stream, y1);
+  getline(*stream, x2);
+  getline(*stream, y2);
+
+  set(stod(x1), stod(y1), stod(x2), stod(y2));
+}
+
+void CLine::save(std::ostream* stream) {
+  CDrawing::EFigType myType = CDrawing::FIG_LINE;
+  (*stream) << myType << endl;
+  (*stream) << P1.X << endl;
+  (*stream) << P1.Y << endl;
+  (*stream) << P2.X << endl;
+  (*stream) << P2.Y << endl;
 }

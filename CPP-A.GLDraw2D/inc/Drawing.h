@@ -14,11 +14,7 @@ version: 1.01
 
 // system includes ////////////////////////////////////////////////////////////
 #include <string>
-#include <vector>
 #include "Point.h"
-#include "Line.h"
-#include "Rectangle.h"
-#include "Circle.h"
 using namespace std;
 
 
@@ -28,7 +24,7 @@ class CDrawing
 {
 public: // types
 	enum EViewMode { VIEW_DRAWING, VIEW_LISTING };
-	enum EFigType { FIG_POINT=0x00, FIG_LINE=0x10, FIG_RECT=0x20, FIG_CIRCLE=0x30 };
+	enum EFigType { FIG_POINT=0x10, FIG_LINE=0x20, FIG_RECT=0x30, FIG_CIRCLE=0x40 };
   static int WIDTH, HEIGTH;
 
 public: // functions

@@ -16,13 +16,13 @@ history: 1.00 - initial version of OpenGL drawing application
 #include <algorithm>
 #include <time.h>
 #include <vector>
+#include <fstream> 
 
 using namespace std;
 
 
 
 // application includes ///////////////////////////////////////////////////////
-#include "../../_COMMON/inc/UtilFLTK.h"
 #include "../inc/Drawing.h"
 #include "../inc/Point.h"
 #include "../inc/Line.h"
@@ -37,8 +37,7 @@ int CDrawing::HEIGTH = 600;
 
 // member variables
 bool initializedRandomFigures = false;
-vector<CFigure*> randomFigures;
-vector<CFigure*> userFigures;
+vector<CFigure*> figures;
 vector<CFigure*>::iterator pos;
 
 
@@ -56,62 +55,6 @@ void CDrawing::reportWindowSize(int width, int height) {
 void CDrawing::displayDrawing( EViewMode mode )
 ///////////////////////////////////////////////////////////////////////////////
 {
-  
-  
-  /* // testing from here
-
-  CPoint p1 { 5.3, 5.4 };
-
-  CFigure::listCount();
-  CPoint::listCount();
-  CLine::listCount();
-  CRectangle::listCount();
-  CCircle::listCount();
-  
-  CPoint p2;
-  p2 = p1;
-
-  CFigure::listCount();
-  CPoint::listCount();
-  CLine::listCount();
-  CRectangle::listCount();
-  CCircle::listCount();
-
-  CPoint p3 = p1;
-
-  CFigure::listCount();
-  CPoint::listCount();
-  CLine::listCount();
-  CRectangle::listCount();
-  CCircle::listCount();
-
-  CLine l1{ CPoint{1, 2}, CPoint(3, 4) };
-
-  CFigure::listCount();
-  CPoint::listCount();
-  CLine::listCount();
-  CRectangle::listCount();
-  CCircle::listCount();
-
-  CLine l2;
-  l2.set(5, 6, 7, 8);
-
-  CFigure::listCount();
-  CPoint::listCount();
-  CLine::listCount();
-  CRectangle::listCount();
-  CCircle::listCount();
-
-  CLine l3 = l1 + l2;
-
-  CFigure::listCount();
-  CPoint::listCount();
-  CLine::listCount();
-  CRectangle::listCount();
-  CCircle::listCount();
-
-  // to here */
-
   if (!initializedRandomFigures) {
     addRandomFigures();
     initializedRandomFigures = true;
@@ -120,14 +63,11 @@ void CDrawing::displayDrawing( EViewMode mode )
   switch (mode) {
   
   case VIEW_DRAWING:
-    // draw user generated figures
-    for (pos = userFigures.begin(); pos != userFigures.end(); pos++) {
+    // draw figures
+    for (pos = figures.begin(); pos != figures.end(); ++pos) {
       (*pos)->draw();
     }
-    // draw random figures
-    for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
-      (*pos)->draw();
-    }
+
     // list total amount of generated figures
     CFigure::listCount();
     CPoint::listCount();
@@ -136,8 +76,8 @@ void CDrawing::displayDrawing( EViewMode mode )
     CCircle::listCount();
     break;
 
-  case CDrawing::VIEW_LISTING:
-    for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
+  case VIEW_LISTING:
+    for (pos = figures.begin(); pos != figures.end(); ++pos) {
       (*pos)->list();
     }
     break;
@@ -156,32 +96,26 @@ void CDrawing::addRandomFigures(void) {
   const int maxRectangleSideLength = 100;
   const int maxCircleRadius = 100;
 
-  // delete dynamically created figures and empty vector, if already present
-  for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
-    delete (*pos);
-  }
-  randomFigures.clear();
-
-  srand(time(NULL));
+  srand(time(nullptr));
 
   // add random points to vector
   for (int i = 0; i < pointAmount; i++) {
-    double x = (double)(rand() % CDrawing::WIDTH);
-    double y = (double)(rand() % CDrawing::HEIGTH);
+    double x = static_cast<double>(rand() % CDrawing::WIDTH);
+    double y = static_cast<double>(rand() % CDrawing::HEIGTH);
     CPoint* p = new CPoint(x, y);
-    randomFigures.push_back(p);
+    figures.push_back(p);
   }
 
   // add random lines to vector
   for (int i = 0; i < lineAmount; i++) {
-    float x1 = (float)(rand() % CDrawing::WIDTH);
-    float y1 = (float)(rand() % CDrawing::HEIGTH);
+    double x1 = static_cast<double>(rand() % CDrawing::WIDTH);
+    double y1 = static_cast<double>(rand() % CDrawing::HEIGTH);
 
-    float x2, y2, lineLength;
+    double x2, y2, lineLength;
 
     do {
-      x2 = (float)(rand() % CDrawing::WIDTH);
-      y2 = (float)(rand() % CDrawing::HEIGTH);
+      x2 = static_cast<double>(rand() % CDrawing::WIDTH);
+      y2 = static_cast<double>(rand() % CDrawing::HEIGTH);
       lineLength = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
     } while (lineLength > maxLineLength);
 
@@ -189,44 +123,44 @@ void CDrawing::addRandomFigures(void) {
     CPoint p2{ x2, y2 };
     CLine* l = new CLine(p1, p2);
 
-    randomFigures.push_back(l);
+    figures.push_back(l);
   }
 
   // add random rectangles to vector
   for (int i = 0; i < rectangleAmount; i++) {
-    float x1 = (float)(rand() % CDrawing::WIDTH);
-    float y1 = (float)(rand() % CDrawing::HEIGTH);
+    double x1 = static_cast<double>(rand() % CDrawing::WIDTH);
+    double y1 = static_cast<double>(rand() % CDrawing::HEIGTH);
     CPoint p1{ x1, y1 };
 
     float x2, y2;
     do {
-      x2 = (float)(rand() % CDrawing::WIDTH);
+      x2 = static_cast<double>(rand() % CDrawing::WIDTH);
     } while (abs(x1 - x2) > maxRectangleSideLength);
 
     do {
-      y2 = (float)(rand() % CDrawing::HEIGTH);
+      y2 = static_cast<double>(rand() % CDrawing::HEIGTH);
     } while (abs(y1 - y2) > maxRectangleSideLength);
 
     CPoint p2{ x2, y2 };
     CRectangle* r = new CRectangle(p1, p2);
 
-    randomFigures.push_back(r);
+    figures.push_back(r);
   }
 
   // add random circles to vector
   for (int i = 0; i < circleAmount; i++) {
     int radius = rand() % maxCircleRadius;
-    float x, y;
+    double x, y;
 
     do {
-      x = (float)(rand() % (CDrawing::WIDTH - radius));
-      y = (float)(rand() % (CDrawing::HEIGTH - radius));
+      x = static_cast<double>(rand() % (CDrawing::WIDTH - radius));
+      y = static_cast<double>(rand() % (CDrawing::HEIGTH - radius));
     } while (x - radius < 0 || y - radius < 0);
 
     CPoint pM{ x, y };
     CCircle* c = new CCircle(pM, radius);
 
-    randomFigures.push_back(c);
+    figures.push_back(c);
   }
 }
 
@@ -237,17 +171,11 @@ void CDrawing::addRandomFigures(void) {
 //           a file.
 ///////////////////////////////////////////////////////////////////////////////
 void CDrawing::clearDrawing( void ) {
-  // delete random figures
-  for (pos = randomFigures.begin(); pos != randomFigures.end(); pos++) {
+  // delete figures
+  for (pos = figures.begin(); pos != figures.end(); ++pos) {
     delete (*pos);
   }
-  randomFigures.clear();
-
-  // delete user figures
-  for (pos = userFigures.begin(); pos != userFigures.end(); pos++) {
-    delete (*pos);
-  }
-  userFigures.clear();
+  figures.clear();
 }
 // CDrawing::clearDrawing() ///////////////////////////////////////////////////
 
@@ -266,19 +194,19 @@ void CDrawing::appendFigure(EFigType figtype, const CPoint& p1, const CPoint& p2
 
   switch (figtype) {
   case FIG_POINT:
-    userFigures.push_back(new CPoint(p1));
+    figures.push_back(new CPoint(p1));
     break;
 
   case FIG_LINE:
-    userFigures.push_back(new CLine(p1, p2));    
+    figures.push_back(new CLine(p1, p2));    
     break;
 
   case FIG_RECT:
-    userFigures.push_back(new CRectangle(p1, p2));
+    figures.push_back(new CRectangle(p1, p2));
     break;
 
   case FIG_CIRCLE:
-    userFigures.push_back(new CCircle(p1, p2));
+    figures.push_back(new CCircle(p1, p2));
     break;
   }
 }
@@ -294,9 +222,9 @@ void CDrawing::appendFigure(EFigType figtype, const CPoint& p1, const CPoint& p2
 void CDrawing::removeFigure( void )
 ///////////////////////////////////////////////////////////////////////////////
 {
-  if (!userFigures.empty()) {
-    delete userFigures.back();
-    userFigures.pop_back();
+  if (!figures.empty()) {
+    delete figures.back();
+    figures.pop_back();
   }
 
 }
@@ -313,7 +241,38 @@ void CDrawing::removeFigure( void )
 void CDrawing::loadDrawingFile(const string& filename)
 ///////////////////////////////////////////////////////////////////////////////
 {
-	// TODO: add drawing file reading code here
+  clearDrawing();
+
+  ifstream ifs(filename);
+  string line;
+
+  while (getline(ifs, line)) {
+    // skip semicolon
+    if (line == ";")  continue;
+
+    // read code
+    int code = stoi(line);
+
+    CFigure* fig = nullptr;
+    switch(code) {
+    case FIG_POINT:
+      fig = new CPoint();
+      break;
+    case FIG_LINE:
+      fig = new CLine();
+      break;
+    case FIG_RECT:
+      fig = new CRectangle();
+      break;
+    case FIG_CIRCLE:
+      fig = new CCircle();
+      break;
+    default:
+      throw invalid_argument("Figure code is invalid.");
+    }
+    fig->load(&ifs);
+    figures.push_back(fig);
+  }
 }
 // CDrawing::loadDrawingFile() ////////////////////////////////////////////////
 
@@ -328,6 +287,18 @@ void CDrawing::loadDrawingFile(const string& filename)
 void CDrawing::saveDrawingFile(const string& filename)
 ///////////////////////////////////////////////////////////////////////////////
 {
-	// TODO: add drawing file writing code here
+   // set deviation to file
+  streambuf* strm_buffer = cout.rdbuf();
+  ofstream ofs (filename);
+  cout.rdbuf(ofs.rdbuf());
+
+  // save data to file
+  for (pos = figures.begin(); pos != figures.end(); ++pos) {
+    (*pos)->save(&cout);
+    cout << ";" << endl;
+  }
+
+  // reset deviation
+  cout.rdbuf(strm_buffer);
 }
 // CDrawing::saveDrawingFile() ////////////////////////////////////////////////

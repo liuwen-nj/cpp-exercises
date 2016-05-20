@@ -24,9 +24,6 @@ using namespace std;
 #include "../../_COMMON/inc/TrackBall.h"
 #include "../../_COMMON/inc/UtilFLTK.h"
 #include "../inc/Point.h"
-#include "../inc/Line.h"
-#include "../inc/Rectangle.h"
-#include "../inc/Circle.h"
 #include "../inc/Drawing.h"
 #include "../inc/CmdHandler.h"
 
@@ -48,7 +45,7 @@ void CCmdHandler::MouseButtonCB(int x1, int y1, int x2, int y2)
 ///////////////////////////////////////////////////////////////////////////////
 {
 	CDrawing::appendFigure(_DrwawingFigure, 
-		CPoint((float)x1,(float)y1), CPoint((float)x2,(float)y2));
+		CPoint(static_cast<float>(x1),static_cast<float>(y1)), CPoint(static_cast<float>(x2),static_cast<float>(y2)));
 }
 
 
@@ -57,7 +54,7 @@ void CCmdHandler::MouseMotionCB(int x1, int y1, int x2, int y2)
 {
 	CDrawing::removeFigure();
 	CDrawing::appendFigure(_DrwawingFigure, 
-		CPoint((float)x1,(float)y1), CPoint((float)x2,(float)y2));
+		CPoint(static_cast<float>(x1),static_cast<float>(y1)), CPoint(static_cast<float>(x2),static_cast<float>(y2)));
 }
 
 
@@ -110,7 +107,6 @@ void CCmdHandler::glutMainMenuCB(int item)
 	case 1:
 		{
 			exit(0);
-			break;
 		}
 	case 2:
 		{

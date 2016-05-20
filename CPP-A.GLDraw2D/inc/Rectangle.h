@@ -27,13 +27,15 @@ class CRectangle : virtual public CFigure {
     CRectangle(double, double, double, double);
     CRectangle(CPoint, CPoint);
     CRectangle(const CRectangle&);
-    CRectangle operator+(const CRectangle&);
+    CRectangle operator+(const CRectangle&) const;
     ~CRectangle();
 
     void set(double, double, double, double);
     void set(CPoint, CPoint);
-    void list(void);
-	  void draw(void);
+    void list(void) override;
+	  void draw(void) override;
+    void load(std::istream*) override;
+    void save(std::ostream*) override;
 };
 
 

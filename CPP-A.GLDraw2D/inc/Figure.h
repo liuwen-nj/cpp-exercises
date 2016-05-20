@@ -16,6 +16,8 @@ public:
 
   virtual void list(void) = 0;
   virtual void draw(void) = 0;
+  virtual void load(std::istream*) = 0;
+  virtual void save(std::ostream*) = 0;
 };
 
 #endif

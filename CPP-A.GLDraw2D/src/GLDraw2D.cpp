@@ -39,7 +39,7 @@ void glutDisplayCB(void)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 		// init coordinates to adjust for mouse input coordinates
-		glTranslatef(0.0, (GLfloat)glutGet(GLUT_WINDOW_HEIGHT), 0.0);
+		glTranslatef(0.0, static_cast<GLfloat>(glutGet(GLUT_WINDOW_HEIGHT)), 0.0);
 		glScalef(1.0, -1.0, 1.0);
 
 		// call drawing display function for figure drawing
@@ -83,7 +83,7 @@ void glutResizeCB(int width, int height)
 {
   CDrawing::reportWindowSize(width, height);
 
-	glViewport(0, 0, (GLsizei)width, (GLsizei)height);
+	glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

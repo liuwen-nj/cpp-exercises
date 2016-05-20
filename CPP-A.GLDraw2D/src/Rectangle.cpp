@@ -6,7 +6,6 @@
  */
 
 #include <iostream>
-#include <algorithm>
 
 #include <GL/glew.h>
 #include <FL/glut.H>
@@ -53,7 +52,8 @@ CRectangle::CRectangle(const CRectangle& obj) {
 
 // operator +: implemented as bounding box for both rectangles
 
-CRectangle CRectangle::operator+(const CRectangle& cRectangle) {
+CRectangle CRectangle::operator+(const CRectangle& cRectangle) const
+{
   float minX = min(this->P1.X, min(this->P2.X, min(cRectangle.P1.X, cRectangle.P2.X)));
   float maxX = max(this->P1.X, max(this->P2.X, max(cRectangle.P1.X, cRectangle.P2.X)));
   float minY = min(this->P1.Y, min(this->P2.Y, min(cRectangle.P1.Y, cRectangle.P2.Y)));
@@ -89,4 +89,23 @@ void CRectangle::list() {
 
 void CRectangle::draw() {
 	glRectf(P1.X, P1.Y, P2.X, P2.Y);
+}
+
+void CRectangle::load(istream* stream) {
+  string x1, y1, x2, y2;
+  getline(*stream, x1);
+  getline(*stream, y1);
+  getline(*stream, x2);
+  getline(*stream, y2);
+
+  set(stod(x1), stod(y1), stod(x2), stod(y2));
+}
+
+void CRectangle::save(std::ostream* stream) {
+  CDrawing::EFigType myType = CDrawing::FIG_RECT;
+  (*stream) << myType << endl;
+  (*stream) << P1.X << endl;
+  (*stream) << P1.Y << endl;
+  (*stream) << P2.X << endl;
+  (*stream) << P2.Y << endl;
 }

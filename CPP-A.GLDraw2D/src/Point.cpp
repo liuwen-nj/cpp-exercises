@@ -46,7 +46,8 @@ CPoint::CPoint(const CPoint& obj) {
 
 // operator +
 
-CPoint CPoint::operator+(const CPoint& obj) {
+CPoint CPoint::operator+(const CPoint& obj) const
+{
 	float x = this->X + obj.X;
 	float y = this->Y + obj.Y;
 
@@ -55,7 +56,8 @@ CPoint CPoint::operator+(const CPoint& obj) {
 
 // operator -
 
-CPoint CPoint::operator-(const CPoint& obj) {
+CPoint CPoint::operator-(const CPoint& obj) const
+{
 	float x = this->X - obj.X;
 	float y = this->Y - obj.Y;
 
@@ -90,4 +92,19 @@ void CPoint::draw(void) {
 	glVertex2f(X, Y - (crosslength + 1));
 	glVertex2f(X, Y + crosslength);
 	glEnd();
+}
+
+void CPoint::load(istream* stream) {
+  string x, y;
+  getline(*stream, x);
+  getline(*stream, y);
+
+  set(stod(x), stod(y));
+}
+
+void CPoint::save(std::ostream* stream) {
+  CDrawing::EFigType myType = CDrawing::FIG_POINT;
+  (*stream) << myType << endl;
+  (*stream) << X << endl;
+  (*stream) << Y << endl;
 }

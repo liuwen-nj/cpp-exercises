@@ -28,13 +28,15 @@ class CLine : virtual public CFigure {
     CLine(CPoint, CPoint);
     CLine(const CLine&);
     CLine& operator=(const CLine&);
-    CLine operator+(const CLine&);
+    CLine operator+(const CLine&) const;
     ~CLine();
 
     void set(double, double, double, double);
     void set(CPoint, CPoint);
-    void list(void);
-	  void draw(void);
+    void list(void) override;
+	  void draw(void) override;
+    void load(std::istream*) override;
+    void save(std::ostream*) override;
 };
 
 #endif /* LINE_H_ */

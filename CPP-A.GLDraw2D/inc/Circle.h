@@ -28,13 +28,15 @@ class CCircle : virtual public CFigure {
     CCircle(CPoint, double);
     CCircle(CPoint, CPoint);
     CCircle(const CCircle&);
-    CCircle operator+(const CCircle&);
+    CCircle operator+(const CCircle&) const;
     ~CCircle();
 
     void set(double, double, double);
     void set(CPoint, CPoint);
-    void list(void);
-	  void draw(void);
+    void list(void) override;
+	  void draw(void) override;
+    void load(std::istream*) override;
+    void save(std::ostream*) override;
 };
 
 
