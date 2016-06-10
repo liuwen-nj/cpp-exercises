@@ -23,6 +23,7 @@ using namespace std;
 
 
 // application includes ///////////////////////////////////////////////////////
+#include "../inc/Exceptions.h"
 #include "../inc/Drawing.h"
 #include "../inc/Point.h"
 #include "../inc/Line.h"
@@ -39,6 +40,7 @@ int CDrawing::HEIGTH = 600;
 bool initializedRandomFigures = false;
 vector<CFigure*> figures;
 vector<CFigure*>::iterator pos;
+string fileID = "GLDraw2DFileID";
 
 
 void CDrawing::reportWindowSize(int width, int height) {
@@ -241,10 +243,16 @@ void CDrawing::removeFigure( void )
 void CDrawing::loadDrawingFile(const string& filename)
 ///////////////////////////////////////////////////////////////////////////////
 {
-  clearDrawing();
 
   ifstream ifs(filename);
   string line;
+
+  getline(ifs, line);
+  if (line != fileID) {
+    throw CErrorFileID();
+  }
+
+  clearDrawing();
 
   while (getline(ifs, line)) {
     // skip semicolon
@@ -268,7 +276,7 @@ void CDrawing::loadDrawingFile(const string& filename)
       fig = new CCircle();
       break;
     default:
-      throw invalid_argument("Figure code is invalid.");
+      throw CErrorFigureType();
     }
     fig->load(&ifs);
     figures.push_back(fig);
@@ -291,6 +299,9 @@ void CDrawing::saveDrawingFile(const string& filename)
   streambuf* strm_buffer = cout.rdbuf();
   ofstream ofs (filename);
   cout.rdbuf(ofs.rdbuf());
+
+  // write file ID as first output line
+  cout << fileID << endl;
 
   // save data to file
   for (pos = figures.begin(); pos != figures.end(); ++pos) {
