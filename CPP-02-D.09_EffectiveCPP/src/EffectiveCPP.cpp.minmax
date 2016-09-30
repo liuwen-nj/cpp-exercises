@@ -1,0 +1,143 @@
+///////////////////////////////////////////////////////////////////////////////
+// Demo: CPP-02.09D - Effective C++  (Maximum and Minimum Call Version)      //
+///////////////////////////////////////////////////////////////////////////////
+// 2009-08-14 schar9: formatting, removed void keyword as parameter, commenting, compare results
+//                    Merged Maximum and Minimum Call Versions. Just switch between'em.
+
+#include <iostream>
+
+//#define MINIMUM_CALL_VERSION // uncomment for using the Minimum Call Version instead of the Maximum Call Version
+
+using namespace std;
+
+// class CPoint
+class CPoint
+{
+private:
+	static int iCtorCount;
+	static int iDtorCount;
+	static int iCopyCount;
+	static int iAssignCount;
+
+public:
+	int iX;
+	int iY;
+
+	CPoint() : iX(0), iY(0) {iCtorCount++;}
+	CPoint(int x, int y) : iX(x), iY(y) {iCtorCount++;}
+	CPoint(const CPoint& Source);
+	CPoint& operator=(const CPoint& Source);
+	~CPoint() {iDtorCount++;}
+
+	static void listCount()
+	{
+		cout << "--> Call Count: " << iCtorCount + iDtorCount + iCopyCount + iAssignCount
+		<< " (Ctor: " << iCtorCount
+		<< ", Dtor: " << iDtorCount
+		<< ", Copy: " << iCopyCount
+		<< ", Assign: " << iAssignCount << ")" << endl;
+	}
+};
+
+// define and init static data members
+int CPoint::iCtorCount = 0;
+int CPoint::iCopyCount = 0;
+int CPoint::iDtorCount = 0;
+int CPoint::iAssignCount = 0;
+
+#ifndef MINIMUM_CALL_VERSION
+// point copy constructor (Maximum Call Version)
+CPoint::CPoint(const CPoint& Source)
+{
+	*this = Source;
+	iCopyCount++;
+}
+#else
+// point copy constructor (Minimum Call Version)
+CPoint::CPoint(const CPoint& Source): iX(Source.iX), iY(Source.iY) {iCopyCount++;}
+#endif
+
+// point assignment operator
+CPoint& CPoint::operator=(const CPoint& Source)
+{
+	iX = Source.iX;
+	iY = Source.iY;
+	iAssignCount++;
+	return *this;
+}
+
+#ifndef MINIMUM_CALL_VERSION
+// class CLine (Maximum Call Version)
+class CLine
+{
+private:
+	CPoint P1;
+	CPoint P2;
+
+public:
+	CLine(const CPoint p1, const CPoint p2);
+	void List();
+};
+#else
+// class CLine (Minimum Call Version)
+class CLine
+{
+private:
+	CPoint P1;
+	CPoint P2;
+
+public:
+	CLine(const CPoint& p1, const CPoint& p2);
+	void List();
+};
+#endif
+
+#ifndef MINIMUM_CALL_VERSION
+// CLine c'tor (Maximum Call Version)
+CLine::CLine(const CPoint p1, const CPoint p2)
+{
+	P1 = p1;
+	P2 = p2;
+}
+#else
+// CLine c'tor (Maximum Call Version)
+CLine::CLine(const CPoint& p1, const CPoint& p2) : P1(p1), P2(p2) {}
+#endif
+
+void CLine::List()
+{
+   cout << "Line Object:" << endl;
+   cout << " P1: iX = " << P1.iX << "  iY = " << P1.iY << endl;
+   cout << " P2: iX = " << P2.iX << "  iY = " << P2.iY << endl << endl;
+}
+
+int main()
+{
+	// show initial call count
+	CPoint::listCount();
+	cout << endl;
+
+	// definitions
+	CLine* pL1;
+	CPoint P1;
+	CPoint P2(30, 30);
+
+	// dynamic instantiation of a line object
+	pL1 = new CLine(P1, P2);
+
+	// list values of line
+	pL1->List();
+
+	// show final call count
+	CPoint::listCount();
+	cout << endl;
+
+	// delete dynamic line object
+	delete pL1;
+
+	// Results:
+	// Maximum Call Version: Call Count: 12 (Ctor: 4, Dtor: 2, Copy: 2, Assign: 4)
+	// Miniumum Call Version: Call Count: 4 (Ctor: 2, Dtor: 0, Copy: 2, Assign: 0)
+	
+	return 0;
+}

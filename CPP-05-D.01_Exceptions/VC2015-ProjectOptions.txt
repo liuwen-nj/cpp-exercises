@@ -1,0 +1,7 @@
+Exceptions like "access violation" are not standard C++ exceptions, they
+don't have a type and so the only way to catch them is to use catch (...).
+
+In addition to enable catching of such exceptions (asynchronous exceptions)
+in C++ you need to change the Enable C++ Exceptions compiler option from
+/EHsc (the default) to /EHa (see Project Properties, Configuration
+Properties, C/C++, Code Generation).
